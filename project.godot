@@ -11,8 +11,17 @@ config_version=5
 [application]
 
 config/name="SpaceDefense"
+run/main_scene="res://scenes/dummy_learning/test.tscn"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=720
+window/size/viewport_height=1280
+window/size/always_on_top=true
+window/stretch/mode="viewport"
+window/stretch/aspect="keep_width"
 
 [physics]
 

@@ -1,3 +1,17 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+/ios/
+
+# Exports / builds
+/exports/
+*.tmp
+
+# Can contain signing secrets (re-add deliberately if needed)
+export_presets.cfg
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+.claude/
