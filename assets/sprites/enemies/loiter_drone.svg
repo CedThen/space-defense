@@ -1,0 +1,9 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+<title>Loiter-drone placeholder</title>
+<polygon points="42,46 56,58 52,76 34,66" fill="#8f3a1e"/>
+<polygon points="86,46 72,58 76,76 94,66" fill="#8f3a1e"/>
+<polygon points="44,52 84,52 80,78 64,100 48,78" fill="#c0512a" stroke="#5a2310" stroke-width="3"/>
+<polygon points="54,58 74,58 70,76 58,76" fill="#d97a52"/>
+<circle cx="64" cy="66" r="9" fill="#ffd0b0" opacity="0.4"/>
+<circle cx="64" cy="66" r="5" fill="#ff5a2a"/>
+</svg>

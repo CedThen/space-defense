@@ -1,0 +1,14 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+<title>Arc coil placeholder</title>
+<ellipse cx="64" cy="103" rx="33" ry="11" fill="#1c1733"/>
+<ellipse cx="64" cy="99" rx="30" ry="10" fill="#352c5a"/>
+<rect x="46" y="80" width="36" height="13" rx="6" fill="#4a4170" stroke="#1c1733" stroke-width="2"/>
+<ellipse cx="64" cy="74" rx="16" ry="6" fill="#5a4f88" stroke="#1c1733" stroke-width="1.5"/>
+<ellipse cx="64" cy="62" rx="13" ry="5" fill="#5a4f88" stroke="#1c1733" stroke-width="1.5"/>
+<ellipse cx="64" cy="52" rx="10" ry="4" fill="#5a4f88" stroke="#1c1733" stroke-width="1.5"/>
+<circle cx="64" cy="34" r="13" fill="#AFA9EC" opacity="0.35"/>
+<circle cx="64" cy="34" r="8" fill="#c9b8ff"/>
+<circle cx="64" cy="34" r="3" fill="#ffffff"/>
+<path d="M64 21 L60 12 L66 7" fill="none" stroke="#c9b8ff" stroke-width="2"/>
+<path d="M77 30 L85 26 L83 19" fill="none" stroke="#c9b8ff" stroke-width="1.5" opacity="0.8"/>
+</svg>

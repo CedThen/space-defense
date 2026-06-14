@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="DefenseDef" format=3 uid="uid://b0jo1jftkugsw"]
+
+[ext_resource type="Script" uid="uid://o5qgjwua6ib0" path="res://scripts/resources/defense_def.gd" id="1_udsyk"]
+
+[resource]
+script = ExtResource("1_udsyk")
+display_name = "Railgun"
+cost_material = 100
+metadata/_custom_type_script = "uid://o5qgjwua6ib0"

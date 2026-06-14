@@ -1,0 +1,10 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+<title>Carrier placeholder</title>
+<ellipse cx="64" cy="56" rx="46" ry="23" fill="#b35029" stroke="#3a160a" stroke-width="3.5"/>
+<ellipse cx="64" cy="49" rx="30" ry="12" fill="#d97a52"/>
+<circle cx="64" cy="47" r="5" fill="#ffd0b0"/>
+<rect x="38" y="68" width="52" height="8" rx="3" fill="#3a160a"/>
+<circle cx="47" cy="88" r="5" fill="#F0997B"/>
+<circle cx="64" cy="94" r="5" fill="#F0997B"/>
+<circle cx="81" cy="88" r="5" fill="#F0997B"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+<title>Shielded enemy placeholder</title>
+<circle cx="64" cy="56" r="22" fill="#D85A30" stroke="#5a2310" stroke-width="3"/>
+<circle cx="64" cy="52" r="6" fill="#ffcaa8"/>
+<path d="M30 80 A 42 42 0 0 0 98 80" fill="none" stroke="#7fd8ff" stroke-width="5" opacity="0.85"/>
+<path d="M34 88 A 46 46 0 0 0 94 88" fill="none" stroke="#bfeaff" stroke-width="2.5" opacity="0.55"/>
+</svg>

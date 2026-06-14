@@ -1,0 +1,5 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+<title>Swarm unit placeholder</title>
+<polygon points="64,94 82,50 64,64 46,50" fill="#ED93B1" stroke="#7a2a44" stroke-width="2.5"/>
+<circle cx="64" cy="62" r="4.5" fill="#fdd5e3"/>
+</svg>
