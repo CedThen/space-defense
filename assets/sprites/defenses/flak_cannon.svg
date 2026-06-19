@@ -1,11 +1,10 @@
-<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-<title>Flak cannon placeholder</title>
-<ellipse cx="64" cy="102" rx="33" ry="11" fill="#2a1d09"/>
-<ellipse cx="64" cy="98" rx="30" ry="10" fill="#5a4a2a"/>
-<polygon points="48,63 58,63 56,22 38,22" fill="#7d6638" stroke="#2a1d09" stroke-width="2"/>
-<polygon points="70,63 80,63 90,22 72,22" fill="#7d6638" stroke="#2a1d09" stroke-width="2"/>
-<ellipse cx="47" cy="23" rx="9" ry="4" fill="#FAC775"/>
-<ellipse cx="81" cy="23" rx="9" ry="4" fill="#FAC775"/>
-<rect x="44" y="60" width="40" height="36" rx="6" fill="#6b5733" stroke="#2a1d09" stroke-width="2"/>
-<rect x="49" y="65" width="30" height="9" rx="4" fill="#8a7140"/>
+<svg width="112" height="128" viewBox="0 0 112 128" xmlns="http://www.w3.org/2000/svg">
+<title>Flak cannon (hex-fit)</title>
+<ellipse cx="56" cy="100" rx="24" ry="8" fill="#2a1d09"/>
+<ellipse cx="56" cy="96" rx="22" ry="7" fill="#5a4a2a"/>
+<polygon points="42,66 50,66 48,30 32,30" fill="#7d6638" stroke="#2a1d09" stroke-width="2"/>
+<polygon points="62,66 70,66 80,30 64,30" fill="#7d6638" stroke="#2a1d09" stroke-width="2"/>
+<ellipse cx="40" cy="31" rx="8" ry="3.5" fill="#FAC775"/>
+<ellipse cx="72" cy="31" rx="8" ry="3.5" fill="#FAC775"/>
+<rect x="40" y="66" width="32" height="30" rx="6" fill="#6b5733" stroke="#2a1d09" stroke-width="2"/>
 </svg>

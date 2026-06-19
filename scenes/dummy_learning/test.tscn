@@ -16,17 +16,17 @@ size = Vector2(64, 64)
 
 [node name="Test" type="Node2D" unique_id=651259819]
 
-[node name="Thingy" type="CharacterBody2D" parent="." unique_id=491964508 node_paths=PackedStringArray("target")]
+[node name="DefenseDummy" type="CharacterBody2D" parent="." unique_id=491964508 node_paths=PackedStringArray("target")]
 position = Vector2(324, 1215)
 script = ExtResource("1_errlg")
 speed = 50.0
 projectile_scene = ExtResource("2_8xq1t")
 target = NodePath("../Target")
 
-[node name="Sprite2D" type="Sprite2D" parent="Thingy" unique_id=1913434504]
+[node name="Sprite2D" type="Sprite2D" parent="DefenseDummy" unique_id=1913434504]
 texture = SubResource("GradientTexture2D_errlg")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Thingy" unique_id=1760754110]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DefenseDummy" unique_id=1760754110]
 position = Vector2(-1, 0)
 shape = SubResource("RectangleShape2D_8xq1t")
 

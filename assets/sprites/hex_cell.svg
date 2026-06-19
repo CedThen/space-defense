@@ -1,0 +1,5 @@
+<svg width="112" height="128" viewBox="0 0 112 128" xmlns="http://www.w3.org/2000/svg">
+<title>Hex cell tile (placeholder, pointy-top)</title>
+<polygon points="108,94 56,124 4,94 4,34 56,4 108,34" fill="#16223a" fill-opacity="0.55" stroke="#5ab0e0" stroke-width="2.5" stroke-opacity="0.85"/>
+<polygon points="97,88 56,111 15,88 15,41 56,17 97,41" fill="none" stroke="#7fd0ff" stroke-width="1.5" stroke-opacity="0.28"/>
+</svg>

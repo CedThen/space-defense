@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://2ywxx853l2d3"]
+
+[ext_resource type="Texture2D" uid="uid://61jyvoysjd5d" path="res://assets/backgrounds/space_field.svg" id="1_07g06"]
+[ext_resource type="Texture2D" uid="uid://b2uo1uiwxx2wc" path="res://assets/backgrounds/planet_surface.svg" id="2_eadm2"]
+[ext_resource type="PackedScene" uid="uid://b8wjias6a3ee5" path="res://scenes/game/hex_grid.tscn" id="3_eadm2"]
+
+[node name="Battle" type="Node2D" unique_id=835896855]
+
+[node name="Background" type="TextureRect" parent="." unique_id=1491596877]
+texture = ExtResource("1_07g06")
+
+[node name="PlanetSurface" type="Sprite2D" parent="." unique_id=296866420]
+position = Vector2(0, 946)
+texture = ExtResource("2_eadm2")
+centered = false
+
+[node name="HexGrid" parent="PlanetSurface" unique_id=562495360 instance=ExtResource("3_eadm2")]
+position = Vector2(360, 231)

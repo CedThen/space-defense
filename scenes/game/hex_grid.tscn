@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://b8wjias6a3ee5"]
+
+[ext_resource type="Script" uid="uid://bg74smtssy6d3" path="res://scenes/game/hex_grid.gd" id="1_pgelx"]
+[ext_resource type="PackedScene" uid="uid://8w4062t830v1" path="res://scenes/game/hex_cell.tscn" id="2_5andr"]
+
+[node name="HexGrid" type="Node2D" unique_id=562495360]
+script = ExtResource("1_pgelx")
+hex_cell_scene = ExtResource("2_5andr")
+hex_size = 40.0
+cols = 8
+margin = 10.0

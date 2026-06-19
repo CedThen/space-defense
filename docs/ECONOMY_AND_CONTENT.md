@@ -40,8 +40,11 @@ Screen space is at a premium on a vertical phone. Three stacked layers, bottom-a
 
 **Aim-nudging:** some ground defenses can have their firing angle adjusted, trading auto-targeting for player-set coverage.
 
+### Orbital platforms — exploratory, post-MVP
+Reach the **orbital / deep** layers by spending a **ground tile** to deploy a platform — a second, smaller `HexGrid` arced higher, shown only once unlocked. Hosts range-limited / alternative defenses (`DefenseDef.layer = orbital`: mines, satellites). Platforms are **inert pass-through anchors with no HP** — only the base has health; their value is positional reach, their cost is the tile + resources. Destructible platforms (a structure-harassing enemy + targeting AI + per-platform HP UI) are deliberate later complexity, not v1.
+
 ### Hex grid
-Defenses sit on **2 rows of hexes** — TFT's board adapted, much softer: placement is small optimizations, not a primary skill axis. Hex adjacency (up to 6 neighbors) opens the possibility of **3-way combines**. 2 rows × ~6–8 hexes lines up with the 12–16 tile scale target.
+Defenses sit on **2 rows of hexes** (currently 8 cols at ~40px) — TFT's board adapted, much softer: placement is small optimizations, not a primary skill axis. Interior cells have ~4 neighbors, feeding the **adjacency combos** below. Lines up with the 12–16 tile scale target.
 
 Open: how the hex board maps onto the three layers — hexes in the ground band with orbital/deep as separate slots, or rows spanning layers?
 
@@ -58,14 +61,16 @@ Open: how the hex board maps onto the three layers — hexes in the ground band 
 
 ---
 
-## Combine mechanic
+## Adjacency combos (aura model)
 
-Place two defenses adjacent to merge them. Frees the second tile — the core benefit on a space-tight screen.
+Merging is dropped (too much authoring + power/tile complexity). Instead, **adjacent defenses buff each other via auras** — no tiles freed, no entity replacement.
 
-- **Same + same:** merges into one tile at ~1.8× output, or a tier-up variant with a new trait. The win is reclaiming a tile, not raw doubling, so merging is a spatial play, not an auto-yes.
-- **Different + different:** combo output. Laser + drone launcher → drones that fire lasers. Each pair is a hand-authored result.
+- Each defense **grants one aura** to neighbors and **receives** theirs. Authoring is O(N) (one aura per defense), not O(N²) pairs. Combos emerge: a *splitter* grants "shots split on hit"; a railgun beside it inherits split — never authored as a pair.
+- **Behavior auras** (split, pierce, chain) are **on/off** — significant but non-stacking. **Numeric auras** (+fire rate, +projectiles) **stack with caps / diminishing returns**. Power stays meaningful without runaway scaling.
+- Recompute **from scratch** on any neighborhood change: reset to base → loop all neighbors → apply. Idempotent, handles 1–4 neighbors identically. **HexGrid** owns adjacency discovery; **Defense** owns combo logic.
+- Power is gated by **assembly cost** — buffer tiles aren't shooting tiles, strong auras sit on costly/teched defenses, forced-diversity enemies punish over-commitment. Let combos be strong; make assembling them a sacrifice.
 
-Open: how many combo pairs to author, whether merges are reversible, whether hex-enabled **3-way merges** exist.
+Open: aura range/stack upgrades; optional authored *pair-specific* marquee combos later.
 
 ---
 
@@ -162,11 +167,34 @@ The problem: level 1 is fully solved — no pressure, full info — so players d
 - **Wave tags.** A wave can carry a modifier applied to whatever it spawns — fast, shielded, regenerating, explode-on-death. Combinatorial variety on top of the base enemy set.
 - **Races.** A race is a bundle: enemy pool subset + shared weakness/resistance profile + weapon/visual flavor (e.g. races A and C use lasers and robotic weaponry — weak to EMP). A run rolls 1–2 races, shown at start — readable counter-logic that feeds the pre-revealed opening. Races pick *who spawns and what counters them*; archetypes pick *spawn rhythm/shape*. Orthogonal dials.
 
+**Bulwark** race — provisional name. Units carry heavy directional shields and hide behind them, defeating direct line-of-fire projectiles. Forces indirect or disabling answers: Drone Launcher and deep-layer Mines go around, EMP Pylon drops the shields, Gravity Well / Stasis pulls them out of cover. Distinct from the **Shielded** enemy tier, a front-absorb that Energy/EMP already counters; Bulwark is a positional puzzle.
+
 ### Curse / pact system — the StS-replacement variety engine
 After certain levels, offer 2–3 bidirectional trades. The player steers their own difficulty and economy, which forces different builds run to run.
 - "+30% enemy armor, but Cores +1/wave"
 - "double enemy speed, but Material income +50%"
 - "enemies explode on death, but defense range +20%"
+
+---
+
+## Player factions
+
+Run-start identity, chosen each run, unlocked via meta. A balanced sidegrade, not added power — it shapes the opening and tilts a playstyle. Balance the unlock order so later factions stay sidegrades. Express identity through opening and behavior, not flat stats. Seed is two; plan for 3–4.
+
+| Faction | Identity | Opens with | Tradeoff |
+|---|---|---|---|
+| **Coalition** — world gov | Econ + control | Pre-built Factory or banked interest; Economy/Control head-start | Slower military ramp; first combat tech costs more |
+| **Syndicate** — corp | Combat tempo | A DPS defense pre-unlocked; Kinetic/Energy head-start | Hand-to-mouth economy; no interest, pricier factories |
+
+### Identity past the opening
+The defenses/tech/powers deck is shared, so a faction is a lens, not a full class. Three levers, cheap to expensive:
+- **Biased offers** — weight the random pools toward the faction. No new content.
+- **Behavioral passive** — one always-on behavior, not a number. E.g. Coalition factories repair the base; Syndicate overkill carries to the next target.
+- **Exclusive node/defense** — 1–2 unique unlocks. Most content-cost; do last.
+
+Keep factions orthogonal — they tilt the opening, not dictate the build.
+
+Open: count at launch; minor run-shaper vs full class; exclusives per faction; interaction with curses/pacts.
 
 ---
 
@@ -181,6 +209,7 @@ The meta currency buys *more game*, making future runs richer rather than easier
 - New enemy types entering the pool
 - New curses/pacts and wave archetypes
 - New opening conditions and starting-board configs — feeds the anti-rote system directly
+- New player factions
 
 A player 50 runs in draws from a wider pool, not bigger numbers.
 
@@ -208,7 +237,7 @@ Open: pure-achievement vs. a convertible meta currency, and how aggressively con
 ## Open questions
 1. Primary currency name: **Material** vs. Materiel / Production / Alloy.
 2. Core drop rate — how scarce should build-defining choices be?
-3. Combine: how many authored combo pairs? Reversible merges?
+3. Adjacency auras: range/stack upgrade design; any authored pair-specific combos?
 4. Aim-nudging — which defenses get it, and is it worth the UI cost on mobile?
 5. Tile counts per layer — confirm the 12–16 budget against playtest feel.
 6. Rare defense delivery — Core purchase, gamba-only, or both?

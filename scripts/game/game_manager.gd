@@ -8,6 +8,8 @@ var _hp: int
 var _spawn_timer: float = 0.0
 var _viewport_size: Vector2
 
+const DEFENSE_ART_RADIUS := 60.0   # defenses are drawn to a radius-60 hex, same as the tile
+
 signal base_hp_changed(new_hp: int)
 signal game_over
 
@@ -20,6 +22,7 @@ func _process(delta: float) -> void:
 	if _spawn_timer <= 0.0:
 		_spawn_enemy()
 		_spawn_timer = spawn_interval
+
 
 func _spawn_enemy() -> void:
 	if not enemy_scene:

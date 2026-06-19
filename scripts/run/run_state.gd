@@ -1,0 +1,92 @@
+extends Node
+## RunState — single source of truth for the current run.
+## Pure data: ids + primitives only, no nodes/Resources. The board renders from this.
+
+signal material_changed(amount: int)
+signal base_hp_changed(amount: int)
+
+const SAVE_PATH := "user://run.save"
+
+var current_run := false
+var level := 1
+var material := 0
+var base_hp := 2000                  # placeholder starting hull
+# each entry: { "def_id": String, "coords": [x, y], "level": int }
+var placed_defenses: Array = []    # untyped on purpose — JSON loads come back untyped
+# tech / powers / curses slot in here later
+
+# --- lifecycle ---
+func start_run() -> void:
+	# TODO seed from MetaProgress 
+	current_run = true
+	level = 1
+	material = 0                   
+	base_hp = 20
+	placed_defenses.clear()
+
+# --- material ---
+func can_afford(cost: int) -> bool:
+	return material >= cost
+
+func add_material(amount: int) -> void:
+	material += amount
+	material_changed.emit(material)
+
+func spend(cost: int) -> bool:
+	if material < cost:
+		return false
+	material -= cost
+	material_changed.emit(material)
+	return true
+
+# --- base ---
+func damage_base(amount: int) -> void:
+	base_hp = max(base_hp - amount, 0)
+	base_hp_changed.emit(base_hp)
+
+# --- placed defenses (the record; the board spawns the view) ---
+func add_defense(def_id: String, coords: Vector2i) -> void:
+	placed_defenses.append({ "def_id": def_id, "coords": [coords.x, coords.y], "level": 0 })
+
+func remove_defense(coords: Vector2i) -> void:
+	for i in placed_defenses.size():
+		var c = placed_defenses[i]["coords"]
+		if int(c[0]) == coords.x and int(c[1]) == coords.y:
+			placed_defenses.remove_at(i)
+			return
+
+# --- serialization ---
+func to_dict() -> Dictionary:
+	return {
+		"current_run": current_run, 
+		"level": level, 
+		"material": material,
+		"base_hp": base_hp, 
+		"placed_defenses": placed_defenses,
+	}
+
+func from_dict(d: Dictionary) -> void:
+	current_run = d.get("current_run", false)
+	level = int(d.get("level", 1))        # JSON numbers parse as float — cast back
+	material = int(d.get("material", 0))
+	base_hp = int(d.get("base_hp", 20))
+	placed_defenses = d.get("placed_defenses", [])
+
+# --- disk I/O ---
+func save_run() -> void:
+	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	if f:
+		f.store_string(JSON.stringify(to_dict()))
+
+func load_run() -> bool:
+	if not FileAccess.file_exists(SAVE_PATH):
+		return false
+	var data = JSON.parse_string(FileAccess.open(SAVE_PATH, FileAccess.READ).get_as_text())
+	if typeof(data) != TYPE_DICTIONARY:
+		return false
+	from_dict(data)
+	return true
+
+func clear() -> void:
+	if FileAccess.file_exists(SAVE_PATH):
+		DirAccess.remove_absolute(SAVE_PATH)

@@ -1,9 +1,12 @@
 [gd_resource type="Resource" script_class="DefenseDef" format=3 uid="uid://b0jo1jftkugsw"]
 
 [ext_resource type="Script" uid="uid://o5qgjwua6ib0" path="res://scripts/resources/defense_def.gd" id="1_udsyk"]
+[ext_resource type="Texture2D" uid="uid://bolmlfbsovk3p" path="res://assets/sprites/defenses/railgun.svg" id="2_o03xv"]
 
 [resource]
 script = ExtResource("1_udsyk")
 display_name = "Railgun"
+texture = ExtResource("2_o03xv")
 cost_material = 100
+attack_range = 400.0
 metadata/_custom_type_script = "uid://o5qgjwua6ib0"
