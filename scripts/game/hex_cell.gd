@@ -11,7 +11,7 @@ const ART_RADIUS := 60.0   # the radius hex_cell.svg was drawn at (right vertex 
 			_apply()
 
 var coords := Vector2i.ZERO
-var occupant: Node = null
+var occupant: Structure = null
 
 @onready var _sprite: Sprite2D = $Sprite2D
 @onready var _collision: CollisionPolygon2D = $CollisionPolygon2D

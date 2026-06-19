@@ -41,7 +41,7 @@ Screen space is at a premium on a vertical phone. Three stacked layers, bottom-a
 **Aim-nudging:** some ground defenses can have their firing angle adjusted, trading auto-targeting for player-set coverage.
 
 ### Orbital platforms — exploratory, post-MVP
-Reach the **orbital / deep** layers by spending a **ground tile** to deploy a platform — a second, smaller `HexGrid` arced higher, shown only once unlocked. Hosts range-limited / alternative defenses (`DefenseDef.layer = orbital`: mines, satellites). Platforms are **inert pass-through anchors with no HP** — only the base has health; their value is positional reach, their cost is the tile + resources. Destructible platforms (a structure-harassing enemy + targeting AI + per-platform HP UI) are deliberate later complexity, not v1.
+Reach the **orbital / deep** layers by spending a **ground tile** to deploy a platform — a second, smaller `HexGrid` arced higher, shown only once unlocked. Hosts range-limited / alternative defenses (`StructureDef.layer = orbital`: mines, satellites). Platforms are **inert pass-through anchors with no HP** — only the base has health; their value is positional reach, their cost is the tile + resources. Destructible platforms (a structure-harassing enemy + targeting AI + per-platform HP UI) are deliberate later complexity, not v1.
 
 ### Hex grid
 Defenses sit on **2 rows of hexes** (currently 8 cols at ~40px) — TFT's board adapted, much softer: placement is small optimizations, not a primary skill axis. Interior cells have ~4 neighbors, feeding the **adjacency combos** below. Lines up with the 12–16 tile scale target.
@@ -149,6 +149,29 @@ Open: branch mutual exclusivity, respec cost, meta-tree gating of which nodes ex
 | **Elite** | Beefed mini-threat, drops Cores | Focus fire, rewards a strong build |
 
 Levels roll different tiers — forced diversity.
+
+### EnemyDef (data-driven)
+Each enemy type is an `EnemyDef` resource (mirrors `StructureDef`). **Core** (every enemy): `max_hp`, `speed`, `attack_damage`, `attack_rate`, `attack_range`, sprite, `display_scale`, `race`, resistances, `reward` (material/Cores on death). **Rich** (node-rendered only): move + attack animations, `behavior` (special abilities). Ranged enemies also carry a projectile.
+
+### Lifecycle & damage — siege, not leak
+Enemies don't pass the base — they **advance, then attack it until they die**. The base drains while enemies are alive in range, so you win by *killing* them, not by blocking a lane.
+- **Advance → attack:** move toward the base until within `attack_range`, then attack continuously (`attack_damage` at `attack_rate`) with an attack animation, until killed. Melee = tiny range (bashes the base); ranged = large range (fires its own projectile).
+- **Suicide types:** ignore range — rush the base and self-destruct on contact (deals its `attack_damage` as one hit), then die.
+- Enemies persist; the only exits are death or suicide-impact. No leak-through.
+
+### Animations & behaviors
+Node enemies get move + attack animations and **pluggable behaviors referenced by the `EnemyDef`** (loiter-accelerate, carrier-spawns-droppers, suicide-rush, …); the movement pattern is one such behavior. Behaviors and animations are node-only.
+- **Animation mechanism:** `AnimationPlayer` (keyframe transform/modulate; a *method track* deals damage on the attack's contact frame, `animation_finished` returns to idle) — works with the single-image SVGs now; swap to `AnimatedSprite2D` + sprite sheets once there are real frames.
+- **Behavior mechanism:** a small state machine on the enemy (`ADVANCE → ATTACK → DIE`) for the universal flow; special abilities as a per-type component/strategy the `EnemyDef` points to, added only where needed.
+
+### Representation — node vs swarm
+**One `EnemyDef` with a `render_mode` flag** (`NODE | MULTIMESH`), not separate types:
+- **Node** — individuals, elites, minibosses, bosses, carriers. Rich: animations, abilities, attacks. Hundreds max.
+- **Swarm (MultiMesh + data-oriented)** — thousands of cheap units: positions in arrays, one movement loop, instanced rendering, no per-unit node/abilities (shader anim at most).
+
+The spawner routes on the flag; shared core fields apply to both, rich fields are ignored by swarm units.
+
+Open: a separate `SwarmDef` if swarm diverges hard; how behaviors are authored (component vs strategy script vs enum); minibosses/boss as `EnemyDef` + phases.
 
 ---
 

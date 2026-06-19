@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="DefenseDef" format=3 uid="uid://c2veqnvbewrdp"]
+[gd_resource type="Resource" script_class="StructureDef" format=3 uid="uid://c2veqnvbewrdp"]
 
-[ext_resource type="Script" uid="uid://o5qgjwua6ib0" path="res://scripts/resources/defense_def.gd" id="1_bjw5o"]
+[ext_resource type="Script" uid="uid://o5qgjwua6ib0" path="res://scripts/resources/structure_def.gd" id="1_gxyyi"]
 [ext_resource type="Texture2D" uid="uid://hxffu2cdhux7" path="res://assets/sprites/defenses/flak_cannon.svg" id="2_gxyyi"]
 
 [resource]
-script = ExtResource("1_bjw5o")
+script = ExtResource("1_gxyyi")
 display_name = "Flak Cannon"
 texture = ExtResource("2_gxyyi")
 cost_material = 150

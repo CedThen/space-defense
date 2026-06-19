@@ -12,17 +12,17 @@ var level := 1
 var material := 0
 var base_hp := 2000                  # placeholder starting hull
 # each entry: { "def_id": String, "coords": [x, y], "level": int }
-var placed_defenses: Array = []    # untyped on purpose — JSON loads come back untyped
+var placed_structures: Array = []    # untyped on purpose — JSON loads come back untyped
 # tech / powers / curses slot in here later
 
 # --- lifecycle ---
 func start_run() -> void:
-	# TODO seed from MetaProgress 
+	# TODO seed from MetaProgress
 	current_run = true
 	level = 1
-	material = 0                   
+	material = 0
 	base_hp = 20
-	placed_defenses.clear()
+	placed_structures.clear()
 
 # --- material ---
 func can_afford(cost: int) -> bool:
@@ -44,25 +44,25 @@ func damage_base(amount: int) -> void:
 	base_hp = max(base_hp - amount, 0)
 	base_hp_changed.emit(base_hp)
 
-# --- placed defenses (the record; the board spawns the view) ---
-func add_defense(def_id: String, coords: Vector2i) -> void:
-	placed_defenses.append({ "def_id": def_id, "coords": [coords.x, coords.y], "level": 0 })
+# --- placed structures (the record; the board spawns the view) ---
+func add_structure(def_id: String, coords: Vector2i) -> void:
+	placed_structures.append({ "def_id": def_id, "coords": [coords.x, coords.y], "level": 0 })
 
-func remove_defense(coords: Vector2i) -> void:
-	for i in placed_defenses.size():
-		var c = placed_defenses[i]["coords"]
+func remove_structure(coords: Vector2i) -> void:
+	for i in placed_structures.size():
+		var c = placed_structures[i]["coords"]
 		if int(c[0]) == coords.x and int(c[1]) == coords.y:
-			placed_defenses.remove_at(i)
+			placed_structures.remove_at(i)
 			return
 
 # --- serialization ---
 func to_dict() -> Dictionary:
 	return {
-		"current_run": current_run, 
-		"level": level, 
+		"current_run": current_run,
+		"level": level,
 		"material": material,
-		"base_hp": base_hp, 
-		"placed_defenses": placed_defenses,
+		"base_hp": base_hp,
+		"placed_structures": placed_structures,
 	}
 
 func from_dict(d: Dictionary) -> void:
@@ -70,7 +70,7 @@ func from_dict(d: Dictionary) -> void:
 	level = int(d.get("level", 1))        # JSON numbers parse as float — cast back
 	material = int(d.get("material", 0))
 	base_hp = int(d.get("base_hp", 20))
-	placed_defenses = d.get("placed_defenses", [])
+	placed_structures = d.get("placed_structures", [])
 
 # --- disk I/O ---
 func save_run() -> void:

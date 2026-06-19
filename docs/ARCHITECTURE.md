@@ -77,7 +77,7 @@ Nodes inside `Battle.tscn` and who owns what:
 | `WaveSpawner` | Spawns enemies on cue (keeps GameManager lean; optional for v1). |
 | `HexGrid` | Builds cells; computes each cell's neighbors once (adjacency). |
 | `HexCell` | `occupant`, `neighbors`, highlight; emits tap. |
-| `Defense` | Reads its `DefenseDef` + neighbor occupants (aura combos); fires. |
+| `Structure` | Reads its `StructureDef` + neighbor occupants (aura combos); fires. |
 | `BattleUI` (CanvasLayer) | Owns the menus; opens the right one on tap; forwards build choice to `GameManager`. |
 | `TopBar` | Displays `RunState` data (material, base_hp). |
 
@@ -109,12 +109,12 @@ The occupied case **injects** the occupant into the status menu (`open(cell.occu
 ```mermaid
 flowchart LR
     TB["try_build(cell, def)"] --> S["RunState.spend(cost)<br/>material -= cost, mark dirty"]
-    S --> R["RunState.add_defense(id, coords)<br/>placed_defenses += entry"]
-    R --> V["spawn Defense node<br/>cell.occupant = node"]
+    S --> R["RunState.add_structure(id, coords)<br/>placed_structures += entry"]
+    R --> V["spawn Structure node<br/>cell.occupant = node"]
     S -. "material_changed (1/frame)" .-> Top["TopBar refresh"]
 ```
 
-Three stores, **two persist**: `RunState.material` and `RunState.placed_defenses` are saved; `cell.occupant` + the spawned node are **runtime only**, rebuilt from `placed_defenses` on load. `cell.occupant` is the live `Defense` node on a cell (or `null`) — used for empty/occupied checks, blocking double-placement, adjacency lookups, and the status-menu target. (If mass deaths ever storm the UI, coalesce `material_changed` to once per frame — deferred for now.)
+Three stores, **two persist**: `RunState.material` and `RunState.placed_structures` are saved; `cell.occupant` + the spawned node are **runtime only**, rebuilt from `placed_structures` on load. `cell.occupant` is the live `Structure` node on a cell (or `null`) — used for empty/occupied checks, blocking double-placement, adjacency lookups, and the status-menu target. (If mass deaths ever storm the UI, coalesce `material_changed` to once per frame — deferred for now.)
 
 **Pause:**
 - Live (no pause): `BuildMenu`, `DefenseStatusMenu`.
@@ -132,9 +132,9 @@ Three stores, **two persist**: `RunState.material` and `RunState.placed_defenses
 `RunState` is the **single source of truth** for the run; live nodes are just a *view* of it. That's what makes saving work — you can't serialize nodes, but you can serialize their data.
 
 - **Store ids + primitives, never live nodes or `Resource` objects.** Placed defenses → `[{ def_id, coords:[x,y], level }]`; tech → `[node_id, …]`; resources → numbers; powers/curses → ids.
-- Defenses reference a `DefenseDef` by a stable **`id`** (add an `id` field, or use its `res://` path); a registry resolves `id → DefenseDef` on load.
-- **Write through methods, not raw fields** — `spend(cost)`, `add_defense(def_id, coords)`, `purchase_tech(id)` — so each write validates and fires a change signal.
-- **The board renders `RunState`.** "Place a defense" and "load a save" share one path: append to `placed_defenses` + spawn the node (needs `HexGrid.get_cell(coords)`). The `Defense` node is never the truth.
+- Defenses reference a `StructureDef` by a stable **`id`** (add an `id` field, or use its `res://` path); a registry resolves `id → StructureDef` on load.
+- **Write through methods, not raw fields** — `spend(cost)`, `add_structure(def_id, coords)`, `purchase_tech(id)` — so each write validates and fires a change signal.
+- **The board renders `RunState`.** "Place a defense" and "load a save" share one path: append to `placed_structures` + spawn the node (needs `HexGrid.get_cell(coords)`). The `Structure` node is never the truth.
 
 ### When & where
 Save **only at Resupply** — never mid-battle, never on pause. Quitting mid-wave loses that wave; resume at the last Resupply.
@@ -159,4 +159,4 @@ Online: none for now. A future high-score / daily-challenge service would be a t
 2. **Director naming:** `Main` vs `Game` (avoid clashing with `GameManager`).
 3. **Targeting migration:** when to move enemies data-oriented (profiler-driven).
 4. **Meta tree scope:** size/shape of the home-base progression — TBD.
-5. **`DefenseDef` id scheme:** explicit `id` field vs `res://` path for save references.
+5. **`StructureDef` id scheme:** explicit `id` field vs `res://` path for save references.

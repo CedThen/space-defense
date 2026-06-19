@@ -1,40 +1,37 @@
 extends Node
 
-@export var base_hp: int = 20
-@export var enemy_scene: PackedScene
-@export var spawn_interval: float = 2.0
+@export var structure_scene: PackedScene
+@export var structure_defs: Array[StructureDef]   # railgun.tres, flak_cannon.tres, ...
 
-var _hp: int
-var _spawn_timer: float = 0.0
-var _viewport_size: Vector2
+@onready var hex_grid: Node2D = %HexGrid
+@onready var structures: Node2D = %Structures
+@onready var wave_spawner: WaveSpawner = %WaveSpawner
 
 const DEFENSE_ART_RADIUS := 60.0   # defenses are drawn to a radius-60 hex, same as the tile
 
-signal base_hp_changed(new_hp: int)
-signal game_over
-
 func _ready() -> void:
-	_hp = base_hp
-	_viewport_size = get_viewport().get_visible_rect().size
+	RunState.start_run()
+	_prototype_populate()
+	# wave_spawner.start()   # uncomment once Enemy exists
 
-func _process(delta: float) -> void:
-	_spawn_timer -= delta
-	if _spawn_timer <= 0.0:
-		_spawn_enemy()
-		_spawn_timer = spawn_interval
-
-
-func _spawn_enemy() -> void:
-	if not enemy_scene:
+func place_structure(cell: HexCell, def: StructureDef) -> void:
+	if cell.occupant != null or structure_scene == null:
 		return
-	var e := enemy_scene.instantiate()
-	add_child(e)
-	e.position = Vector2(randf_range(32.0, _viewport_size.x - 32.0), -32.0)
-	e.add_to_group("enemies")
-	e.reached_bottom.connect(_on_enemy_reached_bottom)
+	RunState.add_structure(def.resource_path, cell.coords)
+	_spawn_structure(cell, def)
 
-func _on_enemy_reached_bottom() -> void:
-	_hp -= 1
-	base_hp_changed.emit(_hp)
-	if _hp <= 0:
-		game_over.emit()
+func _spawn_structure(cell: HexCell, def: StructureDef) -> void:
+	var s := structure_scene.instantiate() as Structure
+	s.def = def
+	structures.add_child(s)
+	s.global_position = cell.global_position
+	s.scale = Vector2.ONE * (cell.size / DEFENSE_ART_RADIUS)
+	cell.occupant = s
+
+func _prototype_populate() -> void:
+	if structure_defs.is_empty():
+		return
+	for child in hex_grid.get_children():
+		var cell := child as HexCell
+		if cell and cell.coords.x % 3 == 0:
+			place_structure(cell, structure_defs[cell.coords.x % structure_defs.size()])

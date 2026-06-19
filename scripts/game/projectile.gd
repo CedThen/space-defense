@@ -17,3 +17,9 @@ func _process(delta: float) -> void:
 	if global_position.distance_to(_target.global_position) < 8.0:
 		_target.take_damage(_damage)
 		queue_free()
+
+#func _on_area_entered(area: Area2D) -> void:
+	#if area.is_in_group("enemies"):
+		#if area.has_method("take_damage"):
+			#area.take_damage(damage)
+		#queue_free()

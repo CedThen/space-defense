@@ -1,3 +1,7 @@
 [gd_scene format=3 uid="uid://dyjfxb36ls4kw"]
 
 [node name="Home" type="Node2D" unique_id=7824916]
+
+[node name="CanvasLayer" type="Control" parent="." unique_id=1805555156]
+layout_mode = 3
+anchors_preset = 0

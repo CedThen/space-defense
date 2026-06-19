@@ -1,10 +1,11 @@
-class_name Defense
+class_name Structure
 extends Node2D
 
-## Autonomous defense. All stats come from its DefenseDef resource.
-## Scans the "enemies" group, fires at the nearest one in range on cooldown.
+## A placeable structure (weapon category for now). Stats come from its StructureDef.
+## Scans the "enemies" group, fires at the nearest in range. Behavior will split by
+## category (weapon/economy/support) into subclasses or components later.
 
-@export var def: DefenseDef
+@export var def: StructureDef
 
 @onready var _sprite: Sprite2D = $Sprite2D
 

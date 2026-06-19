@@ -3,6 +3,12 @@
 [ext_resource type="Texture2D" uid="uid://61jyvoysjd5d" path="res://assets/backgrounds/space_field.svg" id="1_07g06"]
 [ext_resource type="Texture2D" uid="uid://b2uo1uiwxx2wc" path="res://assets/backgrounds/planet_surface.svg" id="2_eadm2"]
 [ext_resource type="PackedScene" uid="uid://b8wjias6a3ee5" path="res://scenes/game/hex_grid.tscn" id="3_eadm2"]
+[ext_resource type="Script" uid="uid://cq8wtebhqej83" path="res://scripts/game/game_manager.gd" id="4_ef2rj"]
+[ext_resource type="PackedScene" uid="uid://btmgao04d8wg2" path="res://scenes/game/structure.tscn" id="5_kejiv"]
+[ext_resource type="Script" uid="uid://o5qgjwua6ib0" path="res://scripts/resources/structure_def.gd" id="6_8b6fr"]
+[ext_resource type="Resource" uid="uid://b0jo1jftkugsw" path="res://resources/defenses/railgun.tres" id="7_ibb2w"]
+[ext_resource type="Resource" uid="uid://c2veqnvbewrdp" path="res://resources/defenses/flak_cannon.tres" id="8_lughm"]
+[ext_resource type="Script" uid="uid://brod1o54uhxmv" path="res://scenes/game/wave_spawner.gd" id="9_kejiv"]
 
 [node name="Battle" type="Node2D" unique_id=835896855]
 
@@ -15,4 +21,17 @@ texture = ExtResource("2_eadm2")
 centered = false
 
 [node name="HexGrid" parent="PlanetSurface" unique_id=562495360 instance=ExtResource("3_eadm2")]
+unique_name_in_owner = true
 position = Vector2(360, 231)
+
+[node name="GameManager" type="Node2D" parent="." unique_id=1001628109]
+script = ExtResource("4_ef2rj")
+structure_scene = ExtResource("5_kejiv")
+structure_defs = Array[ExtResource("6_8b6fr")]([ExtResource("7_ibb2w"), ExtResource("8_lughm")])
+
+[node name="WaveSpawner" type="Node2D" parent="." unique_id=986979582]
+unique_name_in_owner = true
+script = ExtResource("9_kejiv")
+
+[node name="Structures" type="Node2D" parent="." unique_id=1991451026]
+unique_name_in_owner = true
