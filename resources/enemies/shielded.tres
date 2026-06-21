@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EnemyDef" format=3 uid="uid://bf8fyl8bpts1k"]
+
+[ext_resource type="Script" uid="uid://br4w882hcff62" path="res://scripts/resources/enemy_def.gd" id="1_vmmug"]
+[ext_resource type="Texture2D" uid="uid://dpexrtjupyrn0" path="res://assets/sprites/enemies/shielded.svg" id="2_vi1h3"]
+
+[resource]
+script = ExtResource("1_vmmug")
+display_name = "Shielded"
+texture = ExtResource("2_vi1h3")
+display_scale = 0.8
+max_hp = 25.0
+speed = 120.0
+metadata/_custom_type_script = "uid://br4w882hcff62"

@@ -37,11 +37,19 @@ func _acquire_target() -> Node2D:
 			nearest = enemy
 	return nearest
 
+#func _fire(target: Node2D) -> void:
+	#if def.projectile_scene == null:
+		#return
+	#var p := def.projectile_scene.instantiate() as Projectile
+	#get_tree().current_scene.add_child(p)
+	#p.global_position = global_position
+	#p.damage = def.damage
+	#p.launch(target.global_position - global_position)
+
 func _fire(target: Node2D) -> void:
 	if def.projectile_scene == null:
 		return
 	var p := def.projectile_scene.instantiate() as Projectile
 	get_tree().current_scene.add_child(p)
 	p.global_position = global_position
-	p.damage = def.damage
-	p.launch(target.global_position - global_position)
+	p.setup(target, def.damage)

@@ -12,8 +12,8 @@ const DEFENSE_ART_RADIUS := 60.0   # defenses are drawn to a radius-60 hex, same
 func _ready() -> void:
 	RunState.start_run()
 	_prototype_populate()
-	# wave_spawner.start()   # uncomment once Enemy exists
-
+	wave_spawner.start()
+	
 func place_structure(cell: HexCell, def: StructureDef) -> void:
 	if cell.occupant != null or structure_scene == null:
 		return

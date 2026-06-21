@@ -74,7 +74,10 @@ Nodes inside `Battle.tscn` and who owns what:
 | Node | Responsible for |
 |---|---|
 | `GameManager` | Wave timing (drives spawner), win/loss, scene transition, `try_build(cell, def)` (check → spend → place). Modifies `RunState`. |
-| `WaveSpawner` | Spawns enemies on cue (keeps GameManager lean; optional for v1). |
+| `WaveSpawner` | Spawns enemies on cue (keeps GameManager lean; optional for v1). Samples `SpawnArea` for spawn points. |
+| `SpawnArea` (Area2D) | Top spawn band; the spawner picks a random x along its width. |
+| `Enemy` (Area2D) | Reads `EnemyDef`; travels in a straight line toward the Base. Moved by setting `position` (no physics body). Own collision layer — enemies pass through each other and stack; only projectiles hit-test them. Group `enemies`. |
+| `Base` (Marker2D) | The hull; `take_damage()` → `RunState.damage_base`. The point enemies aim at. Group `base`. |
 | `HexGrid` | Builds cells; computes each cell's neighbors once (adjacency). |
 | `HexCell` | `occupant`, `neighbors`, highlight; emits tap. |
 | `Structure` | Reads its `StructureDef` + neighbor occupants (aura combos); fires. |

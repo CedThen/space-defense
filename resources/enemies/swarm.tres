@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemyDef" format=3 uid="uid://dreb66audcler"]
+
+[ext_resource type="Script" uid="uid://br4w882hcff62" path="res://scripts/resources/enemy_def.gd" id="1_dtvae"]
+[ext_resource type="Texture2D" uid="uid://cnhl5gb25kiix" path="res://assets/sprites/enemies/swarm.svg" id="2_6a6h7"]
+
+[resource]
+script = ExtResource("1_dtvae")
+display_name = "Swarm"
+texture = ExtResource("2_6a6h7")
+metadata/_custom_type_script = "uid://br4w882hcff62"

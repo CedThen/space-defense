@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="StructureDef" format=3 uid="uid://b0jo1jftkugsw"]
 
+[ext_resource type="PackedScene" uid="uid://beehkixlnqaxq" path="res://scenes/game/projectile.tscn" id="1_2b574"]
 [ext_resource type="Script" uid="uid://o5qgjwua6ib0" path="res://scripts/resources/structure_def.gd" id="1_o03xv"]
 [ext_resource type="Texture2D" uid="uid://bolmlfbsovk3p" path="res://assets/sprites/defenses/railgun.svg" id="2_o03xv"]
 
@@ -9,4 +10,5 @@ display_name = "Railgun"
 texture = ExtResource("2_o03xv")
 cost_material = 100
 attack_range = 400.0
+projectile_scene = ExtResource("1_2b574")
 metadata/_custom_type_script = "uid://o5qgjwua6ib0"

@@ -9,6 +9,13 @@
 [ext_resource type="Resource" uid="uid://b0jo1jftkugsw" path="res://resources/defenses/railgun.tres" id="7_ibb2w"]
 [ext_resource type="Resource" uid="uid://c2veqnvbewrdp" path="res://resources/defenses/flak_cannon.tres" id="8_lughm"]
 [ext_resource type="Script" uid="uid://brod1o54uhxmv" path="res://scenes/game/wave_spawner.gd" id="9_kejiv"]
+[ext_resource type="PackedScene" uid="uid://b56uks738nho4" path="res://scenes/game/enemy.tscn" id="10_8b6fr"]
+[ext_resource type="Script" uid="uid://br4w882hcff62" path="res://scripts/resources/enemy_def.gd" id="11_wnkjm"]
+[ext_resource type="Resource" uid="uid://dreb66audcler" path="res://resources/enemies/swarm.tres" id="12_t3tos"]
+[ext_resource type="Resource" uid="uid://bf8fyl8bpts1k" path="res://resources/enemies/shielded.tres" id="13_hmn6t"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kejiv"]
+size = Vector2(720, 23)
 
 [node name="Battle" type="Node2D" unique_id=835896855]
 
@@ -29,9 +36,28 @@ script = ExtResource("4_ef2rj")
 structure_scene = ExtResource("5_kejiv")
 structure_defs = Array[ExtResource("6_8b6fr")]([ExtResource("7_ibb2w"), ExtResource("8_lughm")])
 
-[node name="WaveSpawner" type="Node2D" parent="." unique_id=986979582]
+[node name="WaveSpawner" type="Node2D" parent="." unique_id=986979582 node_paths=PackedStringArray("enemies_container", "spawn_area")]
 unique_name_in_owner = true
 script = ExtResource("9_kejiv")
+enemy_scene = ExtResource("10_8b6fr")
+enemy_defs = Array[ExtResource("11_wnkjm")]([ExtResource("12_t3tos"), ExtResource("13_hmn6t")])
+enemies_container = NodePath("../Enemies")
+spawn_area = NodePath("../SpawnArea")
+spawn_interval = 1.0
 
 [node name="Structures" type="Node2D" parent="." unique_id=1991451026]
 unique_name_in_owner = true
+
+[node name="SpawnArea" type="Area2D" parent="." unique_id=1499333781]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpawnArea" unique_id=76475386]
+position = Vector2(360, 12.5)
+shape = SubResource("RectangleShape2D_kejiv")
+disabled = true
+
+[node name="Enemies" type="Node2D" parent="." unique_id=1213258411]
+
+[node name="Base" type="Area2D" parent="." unique_id=1790348595 groups=["base"]]
+
+[node name="CollisionPolygon2d" type="CollisionPolygon2D" parent="Base" unique_id=884801656]
+polygon = PackedVector2Array(0, 1280, 0, 1124, 88, 1100, 205, 1076, 306, 1067, 405, 1065, 496, 1075, 585, 1088, 660, 1105, 719, 1126, 719, 1280)

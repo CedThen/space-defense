@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="StructureDef" format=3 uid="uid://c2veqnvbewrdp"]
 
 [ext_resource type="Script" uid="uid://o5qgjwua6ib0" path="res://scripts/resources/structure_def.gd" id="1_gxyyi"]
+[ext_resource type="PackedScene" uid="uid://beehkixlnqaxq" path="res://scenes/game/projectile.tscn" id="1_ui45x"]
 [ext_resource type="Texture2D" uid="uid://hxffu2cdhux7" path="res://assets/sprites/defenses/flak_cannon.svg" id="2_gxyyi"]
 
 [resource]
@@ -11,4 +12,5 @@ cost_material = 150
 attack_range = 550.0
 fire_rate = 1.5
 damage = 20.0
+projectile_scene = ExtResource("1_ui45x")
 metadata/_custom_type_script = "uid://o5qgjwua6ib0"

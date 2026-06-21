@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://b56uks738nho4"]
+
+[ext_resource type="Script" uid="uid://cimo560jj00a3" path="res://scripts/game/enemy.gd" id="1_1t2yy"]
+
+[node name="Enemy" type="Area2D" unique_id=792013199 groups=["enemies"]]
+script = ExtResource("1_1t2yy")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=678902430]
+unique_name_in_owner = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2107454304]
+unique_name_in_owner = true

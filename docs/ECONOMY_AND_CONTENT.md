@@ -151,7 +151,7 @@ Open: branch mutual exclusivity, respec cost, meta-tree gating of which nodes ex
 Levels roll different tiers — forced diversity.
 
 ### EnemyDef (data-driven)
-Each enemy type is an `EnemyDef` resource (mirrors `StructureDef`). **Core** (every enemy): `max_hp`, `speed`, `attack_damage`, `attack_rate`, `attack_range`, sprite, `display_scale`, `race`, resistances, `reward` (material/Cores on death). **Rich** (node-rendered only): move + attack animations, `behavior` (special abilities). Ranged enemies also carry a projectile.
+Each enemy type is an `EnemyDef` resource (mirrors `StructureDef`). **Core** (every enemy): `max_hp`, `speed`, `attack_kind` (ATTACK | SUICIDE), `attack_damage`, `attack_rate`, `attack_range`, sprite, `display_scale`, `race`, resistances, `reward` (material/Cores on death). **Rich** (node-rendered only): move + attack animations, `behavior` (special abilities). Ranged enemies also carry a projectile.
 
 ### Lifecycle & damage — siege, not leak
 Enemies don't pass the base — they **advance, then attack it until they die**. The base drains while enemies are alive in range, so you win by *killing* them, not by blocking a lane.
