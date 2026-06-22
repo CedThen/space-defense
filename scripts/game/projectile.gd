@@ -1,25 +1,26 @@
 class_name Projectile
-extends Node2D
+extends Area2D
 
-## Homes on a target enemy until it hits or the target is gone.
-## Straight-line / AoE variants come later (that version would be an Area2D).
+## Dumb straight-line projectile: launched with a direction, damage, and speed.
+## Flies until it overlaps any enemy or leaves the screen. No homing, no target.
 
-@export var speed: float = 400.0
-
-var _target: Node2D
+var _velocity: Vector2
 var _damage: float
 
-func setup(target: Node2D, damage: float) -> void:
-	_target = target
-	_damage = damage
+func _ready() -> void:
+	area_entered.connect(_on_area_entered)
 
-func _process(delta: float) -> void:
-	if not is_instance_valid(_target):
+func launch(direction: Vector2, damage: float, speed: float) -> void:
+	_velocity = direction.normalized() * speed
+	_damage = damage
+	rotation = _velocity.angle()   # face travel direction; drop if the sprite is round
+
+func _physics_process(delta: float) -> void:
+	global_position += _velocity * delta
+	if not get_viewport_rect().has_point(global_position):
 		queue_free()
-		return
-	var dir := (_target.global_position - global_position).normalized()
-	global_position += dir * speed * delta
-	if global_position.distance_to(_target.global_position) < 8.0:
-		if _target.has_method("take_damage"):
-			_target.take_damage(_damage)
+
+func _on_area_entered(area: Area2D) -> void:
+	if area.has_method("take_damage"):
+		area.take_damage(_damage)
 		queue_free()

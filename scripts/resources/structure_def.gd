@@ -11,3 +11,4 @@ enum Category { WEAPON, ECONOMY, SUPPORT }
 @export var fire_rate: float = 1.0  # shots per second
 @export var damage: float = 10.0
 @export var projectile_scene: PackedScene
+@export var projectile_speed: float = 400.0

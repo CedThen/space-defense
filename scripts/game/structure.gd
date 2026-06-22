@@ -37,19 +37,19 @@ func _acquire_target() -> Node2D:
 			nearest = enemy
 	return nearest
 
-#func _fire(target: Node2D) -> void:
-	#if def.projectile_scene == null:
-		#return
-	#var p := def.projectile_scene.instantiate() as Projectile
-	#get_tree().current_scene.add_child(p)
-	#p.global_position = global_position
-	#p.damage = def.damage
-	#p.launch(target.global_position - global_position)
-
 func _fire(target: Node2D) -> void:
 	if def.projectile_scene == null:
 		return
 	var p := def.projectile_scene.instantiate() as Projectile
-	get_tree().current_scene.add_child(p)
+	var parent := get_tree().get_first_node_in_group("projectiles")
+	(parent if parent else get_tree().current_scene).add_child(p)
 	p.global_position = global_position
-	p.setup(target, def.damage)
+	p.launch(_aim_at(target), def.damage, def.projectile_speed)
+
+# First-order lead: aim where the target will be by the time the shot reaches it.
+func _aim_at(target: Node2D) -> Vector2:
+	var target_vel := Vector2.ZERO
+	if target is Enemy:
+		target_vel = (target as Enemy).get_velocity()
+	var t := global_position.distance_to(target.global_position) / def.projectile_speed
+	return (target.global_position + target_vel * t) - global_position

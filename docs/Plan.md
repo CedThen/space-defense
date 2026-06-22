@@ -33,10 +33,14 @@
 - create battle scene
     - ✅ earth backdrop 
     - ✅ hex grid for the defense placements
-    - dome appearance
+    - ✅ dome appearance
+    - ✅ wave spawner
 
 - Scaffold defenses and turrets
     - ✅ hex grid
     - menu to place defenses
-    
 
+- Enemies
+    - ✅ enemy definition
+    - ✅ script - basic movement and hp
+    - ✅ move toward base

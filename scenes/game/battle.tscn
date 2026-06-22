@@ -61,3 +61,5 @@ disabled = true
 
 [node name="CollisionPolygon2d" type="CollisionPolygon2D" parent="Base" unique_id=884801656]
 polygon = PackedVector2Array(0, 1280, 0, 1124, 88, 1100, 205, 1076, 306, 1067, 405, 1065, 496, 1075, 585, 1088, 660, 1105, 719, 1126, 719, 1280)
+
+[node name="Projectiles" type="Node2D" parent="." unique_id=1718105680 groups=["projectiles"]]

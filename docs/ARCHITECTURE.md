@@ -80,7 +80,8 @@ Nodes inside `Battle.tscn` and who owns what:
 | `Base` (Marker2D) | The hull; `take_damage()` → `RunState.damage_base`. The point enemies aim at. Group `base`. |
 | `HexGrid` | Builds cells; computes each cell's neighbors once (adjacency). |
 | `HexCell` | `occupant`, `neighbors`, highlight; emits tap. |
-| `Structure` | Reads its `StructureDef` + neighbor occupants (aura combos); fires. |
+| `Structure` | Reads its `StructureDef` + neighbor occupants (aura combos); acquires a target, fires a projectile in that direction. |
+| `Projectile` (Area2D) | Launched with a direction + damage; flies straight, damages the first enemy it overlaps, despawns off-screen. No homing — dumb fire-and-forget. |
 | `BattleUI` (CanvasLayer) | Owns the menus; opens the right one on tap; forwards build choice to `GameManager`. |
 | `TopBar` | Displays `RunState` data (material, base_hp). |
 

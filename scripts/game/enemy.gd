@@ -14,6 +14,9 @@ var _velocity: Vector2
 
 signal died
 
+func get_velocity() -> Vector2:
+	return _velocity
+
 func _ready() -> void:
 	hp = def.max_hp
 	if def.texture:
