@@ -13,6 +13,9 @@
 [ext_resource type="Script" uid="uid://br4w882hcff62" path="res://scripts/resources/enemy_def.gd" id="11_wnkjm"]
 [ext_resource type="Resource" uid="uid://dreb66audcler" path="res://resources/enemies/swarm.tres" id="12_t3tos"]
 [ext_resource type="Resource" uid="uid://bf8fyl8bpts1k" path="res://resources/enemies/shielded.tres" id="13_hmn6t"]
+[ext_resource type="Script" uid="uid://dd0fqnartf51i" path="res://scripts/game/base.gd" id="14_t3tos"]
+[ext_resource type="Script" uid="uid://btnwkk1mifio7" path="res://scripts/ui/battle_ui/top_bar.gd" id="15_hmn6t"]
+[ext_resource type="Script" uid="uid://ckla7t78w1lvg" path="res://scripts/ui/battle_ui/bottom_bar.gd" id="16_orxx1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kejiv"]
 size = Vector2(720, 23)
@@ -23,7 +26,7 @@ size = Vector2(720, 23)
 texture = ExtResource("1_07g06")
 
 [node name="PlanetSurface" type="Sprite2D" parent="." unique_id=296866420]
-position = Vector2(0, 946)
+position = Vector2(0, 900)
 texture = ExtResource("2_eadm2")
 centered = false
 
@@ -49,6 +52,7 @@ spawn_interval = 1.0
 unique_name_in_owner = true
 
 [node name="SpawnArea" type="Area2D" parent="." unique_id=1499333781]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SpawnArea" unique_id=76475386]
 position = Vector2(360, 12.5)
@@ -58,8 +62,172 @@ disabled = true
 [node name="Enemies" type="Node2D" parent="." unique_id=1213258411]
 
 [node name="Base" type="Area2D" parent="." unique_id=1790348595 groups=["base"]]
+collision_layer = 2
+script = ExtResource("14_t3tos")
 
 [node name="CollisionPolygon2d" type="CollisionPolygon2D" parent="Base" unique_id=884801656]
+visible = false
 polygon = PackedVector2Array(0, 1280, 0, 1124, 88, 1100, 205, 1076, 306, 1067, 405, 1065, 496, 1075, 585, 1088, 660, 1105, 719, 1126, 719, 1280)
 
 [node name="Projectiles" type="Node2D" parent="." unique_id=1718105680 groups=["projectiles"]]
+
+[node name="HPLabel" type="Label" parent="." unique_id=2069018325]
+offset_left = 245.0
+offset_top = 1254.0
+offset_right = 457.0
+offset_bottom = 1277.0
+
+[node name="BattleUI" type="CanvasLayer" parent="." unique_id=1800197488]
+
+[node name="UIRoot" type="Control" parent="BattleUI" unique_id=189743148]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopBarPanelContainer" type="PanelContainer" parent="BattleUI/UIRoot" unique_id=43555719]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+script = ExtResource("15_hmn6t")
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleUI/UIRoot/TopBarPanelContainer" unique_id=1014308364]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 12
+
+[node name="Bar" type="Control" parent="BattleUI/UIRoot/TopBarPanelContainer/MarginContainer" unique_id=666417221]
+layout_mode = 2
+
+[node name="ResourceHBox" type="HBoxContainer" parent="BattleUI/UIRoot/TopBarPanelContainer/MarginContainer/Bar" unique_id=1248445293]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_right = 157.0
+offset_bottom = 11.5
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="MaterialLabel" type="Label" parent="BattleUI/UIRoot/TopBarPanelContainer/MarginContainer/Bar/ResourceHBox" unique_id=196597960]
+unique_name_in_owner = true
+layout_mode = 2
+text = "% Material"
+
+[node name="CoresLabel" type="Label" parent="BattleUI/UIRoot/TopBarPanelContainer/MarginContainer/Bar/ResourceHBox" unique_id=1468864768]
+unique_name_in_owner = true
+layout_mode = 2
+text = "% Cores"
+
+[node name="LevelLabel" type="Label" parent="BattleUI/UIRoot/TopBarPanelContainer/MarginContainer/Bar" unique_id=550664051]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -27.0
+offset_top = -11.5
+offset_right = 27.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Level 1"
+
+[node name="WaveLabel" type="Label" parent="BattleUI/UIRoot/TopBarPanelContainer/MarginContainer/Bar" unique_id=1124999475]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -71.0
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 0
+grow_vertical = 2
+text = "Wave 1/4"
+
+[node name="BottomBarPanelContainer" type="PanelContainer" parent="BattleUI/UIRoot" unique_id=1360439384]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -60.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("16_orxx1")
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleUI/UIRoot/BottomBarPanelContainer" unique_id=1248145899]
+custom_minimum_size = Vector2(0, 75)
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 12
+
+[node name="Bar" type="Control" parent="BattleUI/UIRoot/BottomBarPanelContainer/MarginContainer" unique_id=1484647474]
+layout_mode = 2
+
+[node name="SpeedControlButton" type="Button" parent="BattleUI/UIRoot/BottomBarPanelContainer/MarginContainer/Bar" unique_id=1101382596]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -15.5
+offset_right = 26.0
+offset_bottom = 15.5
+grow_vertical = 2
+text = "2x"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BattleUI/UIRoot/BottomBarPanelContainer/MarginContainer/Bar" unique_id=1745441315]
+custom_minimum_size = Vector2(300, 30)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -52.5
+offset_top = -20.0
+offset_right = 52.5
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="BaseBar" type="ProgressBar" parent="BattleUI/UIRoot/BottomBarPanelContainer/MarginContainer/Bar/HBoxContainer" unique_id=1997935922]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 51)
+layout_mode = 2
+
+[node name="BaseLabel" type="Label" parent="BattleUI/UIRoot/BottomBarPanelContainer/MarginContainer/Bar/HBoxContainer" unique_id=217963336]
+unique_name_in_owner = true
+layout_mode = 2
+text = "2000"
+
+[node name="TechTreeButton" type="MenuButton" parent="BattleUI/UIRoot/BottomBarPanelContainer/MarginContainer/Bar" unique_id=587913479]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -53.0
+offset_top = -15.5
+offset_bottom = 15.5
+grow_horizontal = 0
+grow_vertical = 2
+text = "TechTree"

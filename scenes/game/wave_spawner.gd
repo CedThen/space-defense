@@ -37,6 +37,6 @@ func _spawn_one() -> void:
 
 func _random_spawn_point() -> Vector2:
 	var shape := (spawn_area.get_node("CollisionShape2D") as CollisionShape2D).shape as RectangleShape2D
-	var half_w := shape.size.x * 0.5
+	var half_w := shape.size.x * 0.40
 	var c := spawn_area.global_position
 	return Vector2(c.x + randf_range(-half_w, half_w), c.y)

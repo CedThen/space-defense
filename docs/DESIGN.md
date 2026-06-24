@@ -40,6 +40,7 @@ Per level: survive the wave, then on clear earn currency to spend before the nex
 - **Defense:** more of a gimmick than a core pillar (DPS is king in this genre), but should enable alternative strategies via things like defense drones or hardened shields. To explore later.
 
 ### Run structure beats
+- **Level vs wave:** a **level** is the unit between Resupply stops (~10 per run); a **wave** is a timed spawn phase inside a level (one or more per level). Clearing a level → Resupply. MVP: one wave per level.
 - **Level 5 miniboss** (halfway): rewards a stronger buff on clear.
 - **Carryover money:** currency saved at the end of a level carries into the next, and serves as the gamba currency in the post-level phase. Spending vs. saving is itself part of the eco decision.
 

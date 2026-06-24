@@ -24,7 +24,6 @@ flowchart TD
     subgraph data["Autoloads — persistent data only"]
         MP["MetaProgress"]
         RS["RunState — current_run, material, base_hp, level…"]
-        SB["SignalBus"]
     end
 
     Main["Main.tscn (root) — director:<br/>reads autoloads, swaps active scene"]
@@ -42,7 +41,6 @@ flowchart TD
 |---|---|
 | `MetaProgress` | Permanent cross-run data: unlocks, meta points, run history/high scores. Owns `meta.save`. |
 | `RunState` | The live current run: `current_run` flag, material, base_hp, level, tech, powers, curses. Owns `run.save`; `start_run()` seeds from `MetaProgress`. |
-| `SignalBus` | **Declares** cross-cutting signals. No logic — a relay only. |
 
 The root director replaces the need for a `SceneManager` autoload. `GameManager` is **not** an autoload — it's inside `Battle.tscn`, battle-only.
 
@@ -85,28 +83,27 @@ Nodes inside `Battle.tscn` and who owns what:
 | `BattleUI` (CanvasLayer) | Owns the menus; opens the right one on tap; forwards build choice to `GameManager`. |
 | `TopBar` | Displays `RunState` data (material, base_hp). |
 
-**Signal routing — three buckets:**
-- **SignalBus** (cross-cutting / many emitters): `hex_cell_tapped(cell)`, `enemy_died(enemy)`, `request_open_tech_tree`.
-- **Autoload signals** (state changes): `RunState.material_changed`, `base_hp_changed` → `TopBar` connects directly.
-- **Direct child→owner**: `BuildMenu.defense_chosen(def)` → its owner (`BattleUI`).
+**Signal routing — two lanes (no global bus):**
+- **Autoload signals** (state changes): `RunState.material_changed`, `base_hp_changed`, `cores_changed`, `level_changed` → `TopBar` connects directly, pulls current on `_ready`.
+- **Direct owner chains**: `HexCell.tapped(self)` → `HexGrid.cell_tapped(cell)` → `BattleUI`; `BuildMenu.defense_chosen(def)` → `BattleUI` → `GameManager`. Ephemeral wave state: `GameManager.wave_progress` → `WaveMeter`.
 
-Rule: bus for cross-cutting, direct for owned, autoload-signals for state. Don't route everything through the bus, and keep **no logic in the bus**.
+No `SignalBus`: every signal has a clear owner chain or an autoload home. Reintroduce a relay only if a signal gains genuinely many unrelated listeners (e.g. `enemy_died` → economy + achievements + kill-feed). Enemy reward is a direct `RunState.add_material(def.reward)` call.
 
 **Build flow (Pattern A — tap hex → menu, no pause):**
 
 ```mermaid
 flowchart TD
-    Tap["HexCell tapped"] -- "SignalBus.hex_cell_tapped" --> UI["BattleUI"]
+    Tap["HexCell tapped"] -- "HexGrid.cell_tapped" --> UI["BattleUI"]
     UI --> Q{"cell.occupant?"}
     Q -- "empty" --> BM["BuildMenu.open(cell)"]
-    Q -- "occupied" --> SM["DefenseStatusMenu.open(cell.occupant)"]
+    Q -- "occupied" --> SM["StructureCard.open(cell.occupant)"]
     BM -- "defense_chosen" --> TB["GameManager.try_build(cell, def)"]
     TB --> A{"enough material?"}
-    A -- "yes" --> Place["spend, instance Defense, set cell.occupant"]
+    A -- "yes" --> Place["spend, instance Structure, set cell.occupant"]
     A -- "no" --> Deny["feedback"]
 ```
 
-The occupied case **injects** the occupant into the status menu (`open(cell.occupant)`) — the menu displays what it's handed; the occupant never travels through the bus.
+The occupied case **injects** the occupant into the status menu (`open(cell.occupant)`) — the menu displays what it's handed; the occupant is injected, never broadcast.
 
 **Build flow — data trail** (where a placement's data goes):
 
@@ -121,7 +118,7 @@ flowchart LR
 Three stores, **two persist**: `RunState.material` and `RunState.placed_structures` are saved; `cell.occupant` + the spawned node are **runtime only**, rebuilt from `placed_structures` on load. `cell.occupant` is the live `Structure` node on a cell (or `null`) — used for empty/occupied checks, blocking double-placement, adjacency lookups, and the status-menu target. (If mass deaths ever storm the UI, coalesce `material_changed` to once per frame — deferred for now.)
 
 **Pause:**
-- Live (no pause): `BuildMenu`, `DefenseStatusMenu`.
+- Live (no pause): `BuildMenu`, `StructureCard`.
 - Pause (`get_tree().paused = true`): `TechTree`, `PauseMenu`, `DevTools`. Their root uses `process_mode = PROCESS_MODE_WHEN_PAUSED` so they stay interactive while gameplay freezes.
 
 **Targeting at scale:**
@@ -136,7 +133,7 @@ Three stores, **two persist**: `RunState.material` and `RunState.placed_structur
 `RunState` is the **single source of truth** for the run; live nodes are just a *view* of it. That's what makes saving work — you can't serialize nodes, but you can serialize their data.
 
 - **Store ids + primitives, never live nodes or `Resource` objects.** Placed defenses → `[{ def_id, coords:[x,y], level }]`; tech → `[node_id, …]`; resources → numbers; powers/curses → ids.
-- Defenses reference a `StructureDef` by a stable **`id`** (add an `id` field, or use its `res://` path); a registry resolves `id → StructureDef` on load.
+- Structures reference a `StructureDef` by a stable **`id`** (add an `id` field, or use its `res://` path); a registry resolves `id → StructureDef` on load.
 - **Write through methods, not raw fields** — `spend(cost)`, `add_structure(def_id, coords)`, `purchase_tech(id)` — so each write validates and fires a change signal.
 - **The board renders `RunState`.** "Place a defense" and "load a save" share one path: append to `placed_structures` + spawn the node (needs `HexGrid.get_cell(coords)`). The `Structure` node is never the truth.
 

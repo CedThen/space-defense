@@ -12,8 +12,14 @@ const DEFENSE_ART_RADIUS := 60.0   # defenses are drawn to a radius-60 hex, same
 func _ready() -> void:
 	RunState.start_run()
 	_prototype_populate()
+	RunState.base_hp_changed.connect(_on_base_hp_changed)
 	wave_spawner.start()
-	
+
+func _on_base_hp_changed(amount: int) -> void:
+	if amount <= 0:
+		wave_spawner.stop()
+		print("DEFEAT")   # TODO: show a defeat label; real transition comes with run-flow
+
 func place_structure(cell: HexCell, def: StructureDef) -> void:
 	if cell.occupant != null or structure_scene == null:
 		return

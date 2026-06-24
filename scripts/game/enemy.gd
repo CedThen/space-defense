@@ -9,8 +9,14 @@ extends Area2D
 @onready var _sprite: Sprite2D = $Sprite2D
 @onready var _collision: CollisionShape2D = $CollisionShape2D
 
+enum State { ADVANCE, ATTACK }
+
 var hp: float
+var _state := State.ADVANCE
 var _velocity: Vector2
+var _target_point: Vector2
+var _base: Node
+var _attack_cooldown := 0.0
 
 signal died
 
@@ -23,14 +29,35 @@ func _ready() -> void:
 		_sprite.texture = def.texture
 	_sprite.scale = Vector2.ONE * def.display_scale
 	_size_collision_from_texture()
-	# One-time: aim at the base. After this we never touch the base again (this step).
-	var target := _pick_base_target()
-	_velocity = (target - global_position).normalized() * def.speed
+	_base = get_tree().get_first_node_in_group("base")
+	_target_point = _pick_base_target()
+	_velocity = (_target_point - global_position).normalized() * def.speed
 
 func _physics_process(delta: float) -> void:
-	position += _velocity * delta
-	if global_position.y > get_viewport_rect().size.y + 64.0:
-		queue_free()   # temporary safety net until stop-at-range lands
+	match _state:
+		State.ADVANCE: _advance(delta)
+		State.ATTACK: _attack(delta)
+
+func _advance(delta: float) -> void:
+	global_position += _velocity * delta
+	if _base != null and global_position.distance_to(_target_point) <= def.attack_range:
+		if def.attack_kind == EnemyDef.AttackKind.SUICIDE:
+			_hit_base()
+			_die()
+		else:
+			_state = State.ATTACK
+	elif not get_viewport_rect().has_point(global_position):
+		queue_free()   # safety net if there's no base to stop at
+
+func _attack(delta: float) -> void:
+	_attack_cooldown -= delta
+	if _attack_cooldown <= 0.0:
+		_hit_base()
+		_attack_cooldown = 1.0 / def.attack_rate
+
+func _hit_base() -> void:
+	if _base != null and _base.has_method("take_damage"):
+		_base.take_damage(int(def.attack_damage))
 
 func take_damage(amount: float) -> void:
 	hp -= amount
@@ -48,7 +75,7 @@ func _size_collision_from_texture() -> void:
 		return
 	var tex := def.texture.get_size() * def.display_scale
 	var circle := CircleShape2D.new()
-	circle.radius = max(tex.x, tex.y) * 0.5
+	circle.radius = max(tex.x, tex.y) * 0.3
 	_collision.shape = circle
 	
 	

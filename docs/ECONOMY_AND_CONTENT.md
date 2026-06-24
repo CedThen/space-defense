@@ -55,6 +55,7 @@ Open: how the hex board maps onto the three layers — hexes in the ground band 
 - **Build/place is live, mid-battle.** Spending/placement at Resupply likely allowed too.
 - Defenses act **autonomously** — no per-shot micro.
 - Player sets **targeting priority** per defense where it fits: closest / furthest / specific spot.
+- **Manual fire-at (hold to direct):** holding a point on the screen overrides auto-target — defenses fire toward that spot while held. Light optional micro over the autonomous baseline. Open: which defenses obey (all vs. aim-nudge-capable only), and how it composes with per-defense priority.
 - Delivery types: **projectiles** (varied trajectories and effects), **beams**, **drones** (launched, fly around).
 - Defenses are **stationary** — no movement unless a compelling design reason shows up.
 - Enemy AI and spawn mechanics: deferred.
