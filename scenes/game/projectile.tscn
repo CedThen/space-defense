@@ -7,6 +7,7 @@
 radius = 7.071068
 
 [node name="Projectile" type="Area2D" unique_id=1331424559]
+input_pickable = false
 script = ExtResource("1_u1cto")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=963340108]

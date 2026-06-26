@@ -27,15 +27,20 @@
     - meta progression placeholders
 
 ## Ideas and polish
-
-1. hex cell glow + highlight + minor animations
-2. enemies need some animation upon getting hit. pbly doesn't need sound. projectiles also need animation on hit, and sound on firing
+1. Turret part needs to animate + rotate towards the target, projectiles come out from the turret at that angle
+2. hex cell glow + highlight + minor animations
+3. enemies need some animation upon getting hit. pbly doesn't need sound. projectiles also need animation on hit, and sound on firing
 
 
 ## Issues tracker
 1. RunState is a global autoload - do we need to add containment so its not accidentally mutated or called when its not needed?
-2. Maybe a better solution for enemy pathing downwards then stopping at attack range - they have an area2d to detect when they are in range of the base? or is this too resource intensive
+2. Maybe a better solution for enemy pathing downwards then stopping at attack range - they have an area2d to detect when they are in range of the base? or is this too resource intensive (claude says bad idea)
+3. Projectiles.gd seems a little flimsy - needs improvements, currently handling all projectiles
+4. an unaffordable structure in the buildmenu should still have hover highlighting enabled, just not clickable
 
+## Tech Tree Ideas
+1. Improved targeting - projectiles lead the target better, missiles retarget, etc
+2. Faster projectiles
 
 ### Current Task
 

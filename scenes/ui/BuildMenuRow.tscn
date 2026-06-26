@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://byp1q1svme8ho"]
+
+[ext_resource type="Script" uid="uid://du30hhx6mv7x1" path="res://scenes/ui/build_menu_row.gd" id="1_1ysv4"]
+[ext_resource type="Texture2D" uid="uid://hxffu2cdhux7" path="res://assets/sprites/defenses/flak_cannon.svg" id="2_45og7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dj8qi"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_left = 5.0
+expand_margin_right = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5jttb"]
+bg_color = Color(1, 1, 1, 0.5176471)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_left = 5.0
+expand_margin_right = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_45og7"]
+bg_color = Color(1, 1, 1, 0.17254902)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_left = 5.0
+expand_margin_right = 5.0
+
+[node name="BuildMenuRow" type="Button" unique_id=832900005]
+custom_minimum_size = Vector2(300, 40)
+theme_override_styles/normal = SubResource("StyleBoxFlat_dj8qi")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5jttb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_45og7")
+script = ExtResource("1_1ysv4")
+
+[node name="Content" type="HBoxContainer" parent="." unique_id=1480423980]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Icon" type="TextureRect" parent="Content" unique_id=476708219]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("2_45og7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="Content" unique_id=1560752016]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Flak Cannon"
+
+[node name="CostLabel" type="Label" parent="Content" unique_id=59889685]
+unique_name_in_owner = true
+layout_mode = 2
+text = "100"

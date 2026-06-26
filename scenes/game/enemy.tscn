@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cimo560jj00a3" path="res://scripts/game/enemy.gd" id="1_1t2yy"]
 
 [node name="Enemy" type="Area2D" unique_id=792013199 groups=["enemies"]]
+input_pickable = false
 script = ExtResource("1_1t2yy")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=678902430]

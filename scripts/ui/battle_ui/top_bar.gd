@@ -15,7 +15,7 @@ func _ready() -> void:
 	_wave.text = "Wave 1"   # placeholder until GameManager drives wave state
 
 func _on_material_changed(amount: int) -> void:
-	_material.text = "%d" % amount
+	_material.text = "%d Materials" % amount
 
 func _on_cores_changed(amount: int) -> void:
-	_cores.text = "%d" % amount
+	_cores.text = "%d Cores" % amount

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+</helmet>
+<div style="position:absolute; inset:0; overflow:hidden; font-family:'Chakra Petch',system-ui,sans-serif; color:#cfe0ea; background:radial-gradient(135% 95% at 50% -5%, #2c2160 0%, #1b1a48 22%, #131a3a 44%, #0d1730 66%, #0a1422 100%);">
+  {{ scene }}
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const h = React.createElement;
+    const C = { cyan:'#3fd0e6', cyan2:'#9becf5', cyanDim:'#1f8aa0', pink:'#ec5f9b', pink2:'#f7a8cd', orb:'#ff7038', orb2:'#ffc79c', core:'#b07bff', mat:'#52e6a0', txt:'#cfe0ea', mut:'#6f8595' };
+    const mode = this.props.mode || 'normal';
+    const highlight = this.props.highlight || '';
+
+    // ---------- glows + starfield ----------
+    const tealGlow = h('div',{key:'tg',style:{position:'absolute',right:'-8%',bottom:'6%',width:'72%',height:'42%',background:'radial-gradient(ellipse at center, rgba(46,196,176,0.22), transparent 70%)',pointerEvents:'none'}});
+    const stars = ['20% 14%','68% 9%','85% 22%','12% 30%','42% 18%','75% 33%','30% 44%','55% 26%','90% 46%','8% 52%','62% 50%','48% 8%','35% 60%','82% 60%','18% 66%','70% 70%','5% 12%','95% 14%','58% 40%','26% 24%'];
+    const starBg = stars.map((p,i)=>`radial-gradient(${i%4===0?1.4:1}px ${i%4===0?1.4:1}px at ${p}, ${i%3===0?'#dff0ff':'#9fc6dd'}${i%3===0?'cc':'77'}, transparent)`).join(',');
+    const starfield = h('div',{key:'sf',style:{position:'absolute',inset:0,backgroundImage:starBg,backgroundRepeat:'no-repeat'}});
+
+    // ---------- planet base ----------
+    const planet = h('div',{key:'pl',style:{position:'absolute',left:'50%',bottom:-450,width:1120,height:560,transform:'translateX(-50%)',borderRadius:'50%',background:'radial-gradient(ellipse 58% 80% at 50% 26%, #173c50 0%, #0e2838 46%, #0a1a28 76%)',borderTop:`2px solid ${C.cyan}`,boxShadow:`0 -8px 55px -10px ${C.cyan}`}});
+
+    // ---------- enemy glyphs ----------
+    const dart = (s)=>h('div',{style:{position:'relative',width:s,height:s*0.82,display:'flex',alignItems:'center',justifyContent:'center'}},[
+      h('div',{key:'b',style:{position:'absolute',inset:0,clipPath:'polygon(50% 100%, 8% 16%, 30% 0, 50% 46%, 70% 0, 92% 16%)',background:`linear-gradient(165deg, ${C.pink2}, ${C.pink} 55%, #c2347a)`,filter:`drop-shadow(0 0 5px ${C.pink}88)`}}),
+      h('div',{key:'d',style:{position:'absolute',top:s*0.12,width:s*0.13,height:s*0.13,borderRadius:'50%',background:'#fff',boxShadow:'0 0 4px #fff'}})
+    ]);
+    const orb = (s,shield)=>h('div',{style:{position:'relative',width:s,height:s,display:'flex',alignItems:'center',justifyContent:'center'}},[
+      h('div',{key:'o',style:{width:s,height:s,borderRadius:'50%',background:`radial-gradient(circle at 36% 30%, ${C.orb2}, ${C.orb} 46%, #d83a18 100%)`,boxShadow:`0 0 9px ${C.orb}99`}}),
+      shield && h('div',{key:'s',style:{position:'absolute',bottom:-s*0.42,left:'50%',transform:'translateX(-50%)',width:s*1.55,height:s*0.78,borderBottom:`2px solid ${C.cyan}`,borderRadius:'0 0 999px 999px',boxShadow:`0 3px 7px -3px ${C.cyan}`,opacity:0.92}})
+    ]);
+    const enemyGlyph=(k,s,sh)=> k==='dart'?dart(s):orb(s,sh);
+    const enemies=[
+      {l:'20%',t:'9%',k:'dart',s:34},{l:'47%',t:'17%',k:'dart',s:30},
+      {l:'40%',t:'31%',k:'orb',s:26,sh:true},{l:'33%',t:'49%',k:'orb',s:26,sh:true},
+      {l:'74%',t:'69%',k:'dart',s:26},{l:'83%',t:'77%',k:'orb',s:24,sh:true},{l:'71%',t:'80%',k:'orb',s:27,sh:true},
+      {l:'17%',t:'77%',k:'dart',s:30},{l:'40%',t:'80%',k:'dart',s:25}
+    ];
+    const enemyLayer=h('div',{key:'en',style:{position:'absolute',inset:0,pointerEvents:'none'}},
+      enemies.map((e,i)=>h('div',{key:i,style:{position:'absolute',left:e.l,top:e.t,transform:'translate(-50%,-50%)'}}, enemyGlyph(e.k,e.s,e.sh))));
+
+    // ---------- damage numbers ----------
+    const dmgs=[{l:'35%',t:'44%',v:'180',c:C.cyan2},{l:'77%',t:'73%',v:'95',c:'#fff',crit:true}];
+    const dmgLayer=h('div',{key:'dn',style:{position:'absolute',inset:0,pointerEvents:'none',fontFamily:"'JetBrains Mono',monospace"}},
+      dmgs.map((d,i)=>h('div',{key:i,style:{position:'absolute',left:d.l,top:d.t,transform:'translate(-50%,-50%)',fontSize:d.crit?15:13,fontWeight:700,color:d.c,textShadow:'0 1px 4px rgba(0,0,0,0.8)'}}, '-'+d.v+(d.crit?'!':''))));
+
+    // ---------- weapon fire ----------
+    const beam=(l,bot,len,rot,c)=>h('div',{style:{position:'absolute',left:l,bottom:bot,width:3,height:len,transformOrigin:'bottom center',transform:`rotate(${rot}deg)`,borderRadius:3,background:`linear-gradient(to top, ${c}, ${c}00)`,filter:`drop-shadow(0 0 5px ${c})`,opacity:0.85}});
+    const fireLayer=h('div',{key:'fl',style:{position:'absolute',inset:0,pointerEvents:'none'}},[
+      beam('31%',150,330,-7,C.cyan2), beam('60%',150,200,22,C.cyan2),
+      h('div',{key:'mz',style:{position:'absolute',left:'33%',bottom:148,width:7,height:7,borderRadius:'50%',background:'#fff',boxShadow:`0 0 9px 3px ${C.cyan}`}})
+    ]);
+
+    // ---------- turret glyphs ----------
+    const mount=(inner,c)=>h('div',{style:{width:26,height:26,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'radial-gradient(circle at 35% 28%, rgba(255,255,255,0.16), rgba(6,16,24,0.92))',boxShadow:`0 0 0 1px ${c}77, 0 0 8px ${c}66`}},inner);
+    const turret=(type,ghost)=>{
+      const op=ghost?0.42:1; let c=C.cyan, inner=null;
+      if(type==='rail') inner=h('div',{style:{width:4,height:15,borderRadius:2,background:`linear-gradient(${C.cyan2},${C.cyan})`,boxShadow:`0 0 4px ${C.cyan}`}});
+      else if(type==='pulse') inner=h('div',{style:{width:13,height:13,borderRadius:'50%',border:`2px solid ${C.cyan}`,boxShadow:`inset 0 0 3px ${C.cyan}, 0 0 4px ${C.cyan}`}});
+      else if(type==='flak') inner=h('div',{style:{width:14,height:15,clipPath:'polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)',background:C.cyan,boxShadow:`0 0 4px ${C.cyan}`}});
+      else if(type==='missile') inner=h('div',{style:{display:'flex',gap:2,alignItems:'flex-end'}},[h('div',{style:{width:0,height:0,borderLeft:'3px solid transparent',borderRight:'3px solid transparent',borderBottom:`6px solid ${C.cyan2}`}}),h('div',{style:{width:0,height:0,borderLeft:'3.5px solid transparent',borderRight:'3.5px solid transparent',borderBottom:`7px solid ${C.cyan}`}}),h('div',{style:{width:0,height:0,borderLeft:'3px solid transparent',borderRight:'3px solid transparent',borderBottom:`6px solid ${C.cyan2}`}})]);
+      else if(type==='arc') inner=h('div',{style:{width:11,height:11,border:`2px solid ${C.cyan}`,transform:'rotate(45deg)',boxShadow:`0 0 5px ${C.cyan}`}});
+      else if(type==='factory'){ c=C.mat; inner=h('div',{style:{width:13,height:14,clipPath:'polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)',background:C.mat,boxShadow:`0 0 5px ${C.mat}`}}); }
+      return h('div',{style:{opacity:op,display:'flex',alignItems:'center',justifyContent:'center'}}, mount(inner,c));
+    };
+
+    // ---------- hex grid ----------
+    const HEXCLIP='polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)';
+    const cell=(id,occ)=>{
+      const isHi=highlight===id;
+      const showRange=isHi && mode!=='normal';
+      const ghost=isHi && mode==='placing';
+      const ring=isHi && mode==='inspecting';
+      const stroke=isHi?C.cyan:'rgba(63,208,230,0.4)';
+      const fill=isHi?'rgba(63,208,230,0.1)':'rgba(10,26,38,0.32)';
+      return h('div',{key:id,style:{position:'relative',width:46,height:52,flex:'none',display:'flex',alignItems:'center',justifyContent:'center'}},[
+        showRange && h('div',{key:'rg',style:{position:'absolute',left:'50%',top:'50%',width:186,height:186,transform:'translate(-50%,-50%)',borderRadius:'50%',border:`1.5px dashed ${C.cyan}cc`,background:`radial-gradient(circle, ${C.cyan}22, ${C.cyan}0a 56%, transparent 72%)`,pointerEvents:'none',zIndex:6}}),
+        ring && h('div',{key:'sr',style:{position:'absolute',width:52,height:59,clipPath:HEXCLIP,background:C.cyan,filter:`drop-shadow(0 0 7px ${C.cyan})`}}),
+        h('div',{key:'ho',style:{position:'absolute',width:46,height:52,clipPath:HEXCLIP,background:stroke}}),
+        h('div',{key:'hi',style:{position:'absolute',width:42.5,height:48.5,clipPath:HEXCLIP,background:fill}}),
+        occ && h('div',{key:'oc',style:{position:'relative',zIndex:2}}, turret(occ,false)),
+        ghost && h('div',{key:'gh',style:{position:'relative',zIndex:2}}, turret('rail',true))
+      ]);
+    };
+    const row1=[null,'rail',null,null,'pulse',null,'factory'];
+    const row2=['flak',null,null,'arc',null,'missile',null];
+    const grid=h('div',{key:'gr',style:{position:'absolute',left:0,right:0,bottom:116,display:'flex',flexDirection:'column',alignItems:'center'}},[
+      h('div',{key:'r1',style:{display:'flex',gap:5}}, row1.map((o,i)=>cell('r1c'+i,o))),
+      h('div',{key:'r2',style:{display:'flex',gap:5,marginTop:-12,marginLeft:26}}, row2.map((o,i)=>cell('r2c'+i,o)))
+    ]);
+
+    const scene=h('div',{style:{position:'absolute',inset:0}},[tealGlow,starfield,planet,grid,enemyLayer,fireLayer,dmgLayer]);
+    return { scene };
+  }
+}
+</script>
+</body>
+</html>

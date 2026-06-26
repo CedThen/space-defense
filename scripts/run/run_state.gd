@@ -22,7 +22,7 @@ func start_run() -> void:
 	# TODO seed from MetaProgress
 	current_run = true
 	level = 1
-	material = 0
+	material = 10
 	alien_cores = 0
 	base_hp = 2000
 	base_hp_max = base_hp

@@ -14,19 +14,50 @@
 [ext_resource type="Resource" uid="uid://dreb66audcler" path="res://resources/enemies/swarm.tres" id="12_t3tos"]
 [ext_resource type="Resource" uid="uid://bf8fyl8bpts1k" path="res://resources/enemies/shielded.tres" id="13_hmn6t"]
 [ext_resource type="Script" uid="uid://dd0fqnartf51i" path="res://scripts/game/base.gd" id="14_t3tos"]
+[ext_resource type="Script" uid="uid://bgeram2hpg1qh" path="res://scripts/ui/battle_ui/battle_ui.gd" id="15_8x3x1"]
 [ext_resource type="Script" uid="uid://btnwkk1mifio7" path="res://scripts/ui/battle_ui/top_bar.gd" id="15_hmn6t"]
 [ext_resource type="Script" uid="uid://ckla7t78w1lvg" path="res://scripts/ui/battle_ui/bottom_bar.gd" id="16_orxx1"]
+[ext_resource type="Script" uid="uid://coxvf21vy52f3" path="res://scripts/ui/battle_ui/build_menu.gd" id="18_i1fqw"]
+[ext_resource type="PackedScene" uid="uid://byp1q1svme8ho" path="res://scenes/ui/BuildMenuRow.tscn" id="19_4wni1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kejiv"]
 size = Vector2(720, 23)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4wni1"]
+bg_color = Color(0.057639908, 0.08918126, 0.13033918, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.24705882, 0.8156863, 0.9019608, 0.2784314)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_left = 12.0
+expand_margin_top = 12.0
+expand_margin_right = 12.0
+expand_margin_bottom = 12.0
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 8
+shadow_offset = Vector2(0, 6)
 
 [node name="Battle" type="Node2D" unique_id=835896855]
 
 [node name="Background" type="TextureRect" parent="." unique_id=1491596877]
 texture = ExtResource("1_07g06")
 
+[node name="Base" type="Area2D" parent="." unique_id=1790348595 groups=["base"]]
+collision_layer = 2
+input_pickable = false
+script = ExtResource("14_t3tos")
+
+[node name="CollisionPolygon2d" type="CollisionPolygon2D" parent="Base" unique_id=884801656]
+visible = false
+polygon = PackedVector2Array(0, 1280, 0, 1124, 88, 1100, 205, 1076, 306, 1067, 405, 1065, 496, 1075, 585, 1088, 660, 1105, 719, 1126, 719, 1280)
+
 [node name="PlanetSurface" type="Sprite2D" parent="." unique_id=296866420]
-position = Vector2(0, 900)
+position = Vector2(0, 889.225)
 texture = ExtResource("2_eadm2")
 centered = false
 
@@ -35,6 +66,8 @@ unique_name_in_owner = true
 position = Vector2(360, 231)
 
 [node name="GameManager" type="Node2D" parent="." unique_id=1001628109]
+unique_name_in_owner = true
+position = Vector2(2, -1)
 script = ExtResource("4_ef2rj")
 structure_scene = ExtResource("5_kejiv")
 structure_defs = Array[ExtResource("6_8b6fr")]([ExtResource("7_ibb2w"), ExtResource("8_lughm")])
@@ -61,14 +94,6 @@ disabled = true
 
 [node name="Enemies" type="Node2D" parent="." unique_id=1213258411]
 
-[node name="Base" type="Area2D" parent="." unique_id=1790348595 groups=["base"]]
-collision_layer = 2
-script = ExtResource("14_t3tos")
-
-[node name="CollisionPolygon2d" type="CollisionPolygon2D" parent="Base" unique_id=884801656]
-visible = false
-polygon = PackedVector2Array(0, 1280, 0, 1124, 88, 1100, 205, 1076, 306, 1067, 405, 1065, 496, 1075, 585, 1088, 660, 1105, 719, 1126, 719, 1280)
-
 [node name="Projectiles" type="Node2D" parent="." unique_id=1718105680 groups=["projectiles"]]
 
 [node name="HPLabel" type="Label" parent="." unique_id=2069018325]
@@ -78,6 +103,7 @@ offset_right = 457.0
 offset_bottom = 1277.0
 
 [node name="BattleUI" type="CanvasLayer" parent="." unique_id=1800197488]
+script = ExtResource("15_8x3x1")
 
 [node name="UIRoot" type="Control" parent="BattleUI" unique_id=189743148]
 layout_mode = 3
@@ -86,6 +112,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="TopBarPanelContainer" type="PanelContainer" parent="BattleUI/UIRoot" unique_id=43555719]
 layout_mode = 1
@@ -231,3 +258,37 @@ offset_bottom = 15.5
 grow_horizontal = 0
 grow_vertical = 2
 text = "TechTree"
+
+[node name="BuildMenu" type="PanelContainer" parent="BattleUI/UIRoot" unique_id=491632145]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 0
+offset_left = 199.0
+offset_top = 526.0
+offset_right = 389.0
+offset_bottom = 566.0
+pivot_offset_ratio = Vector2(0, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_4wni1")
+script = ExtResource("18_i1fqw")
+row_scene = ExtResource("19_4wni1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BattleUI/UIRoot/BuildMenu" unique_id=180208729]
+layout_mode = 2
+
+[node name="Header" type="HBoxContainer" parent="BattleUI/UIRoot/BuildMenu/VBoxContainer" unique_id=1331718649]
+layout_mode = 2
+
+[node name="BuildMenuLabel" type="Label" parent="BattleUI/UIRoot/BuildMenu/VBoxContainer/Header" unique_id=1820236454]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Build Menu"
+
+[node name="CloseButton" type="Button" parent="BattleUI/UIRoot/BuildMenu/VBoxContainer/Header" unique_id=496192772]
+unique_name_in_owner = true
+layout_mode = 2
+text = "X"
+
+[node name="BuildList" type="VBoxContainer" parent="BattleUI/UIRoot/BuildMenu/VBoxContainer" unique_id=21719423]
+unique_name_in_owner = true
+layout_mode = 2

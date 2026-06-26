@@ -1,3 +1,4 @@
+class_name GameManager
 extends Node
 
 @export var structure_scene: PackedScene
@@ -33,6 +34,14 @@ func _spawn_structure(cell: HexCell, def: StructureDef) -> void:
 	s.global_position = cell.global_position
 	s.scale = Vector2.ONE * (cell.size / DEFENSE_ART_RADIUS)
 	cell.occupant = s
+
+func try_build(cell: HexCell, def: StructureDef) -> bool:
+	if cell.occupant != null:
+		return false
+	if not RunState.spend(def.cost_material):
+		return false   # can't afford
+	place_structure(cell, def)
+	return true
 
 func _prototype_populate() -> void:
 	if structure_defs.is_empty():
